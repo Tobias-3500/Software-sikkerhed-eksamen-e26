@@ -22,6 +22,21 @@ Analyse af risiko ("Konsekvens"×"Sandsynlighed" )
 
 Risikoanalysen tager udangspunk i en risikomatricen "risikomatrix.png".
 
+Skala for konsekvens (1–5)
+   1 – Ubetydeligt
+   2 – Begrænset
+   3 – Alvorligt
+   4 – Farligt
+   5 – Katastrofalt
+   
+Skala for sandsynlighed (1–5)
+   1 – Usandsynligt
+   2 – Sjældent
+   3 – Muligt
+   4 – Sandsynligt
+   5 – Næsten sikkert
+      Risikoen beregnes som konsekvens x sansynliged
+
 Konsekvens: 4 – Farligt (eller 5 – Katastrofalt) 
 Begrundelse: Misbrugstilfældet rammer både personlige oplysninger, leveringsoplysninger og betalingskortoplysninger, hvilket kan medføre alvorlige økonomiske, juridiske og omdømmemæssige konsekvenser for forretningen og kunderne.
 
@@ -35,6 +50,9 @@ Evaluering og håndtering af risiko
 Evaluering / prioritering: Risikoen vurderes som høj og prioriteres videre frem for at blive behandlet som en accepteret risiko eller fjernet som systemmål. 
 
 Håndtering: Risikoen søges minimeret ved at gå videre til Trusselsmodellering (hvor tekniske trusler identificeres med f.eks. STRIDE) og efterfølgende implementere relevante sikkerhedsforbedringer. 
+
+...usikkerhed, antagelser og manglende viden.
+Risikovurderingen er gennemført med et kvalitativt grundlag med fokus på at prioritere misbrugstilfælde frem for præcise risikoværdier. vurderingen bygger på antagelsen om, at enhver autenficieret bruger kan forsøge at tilgå andre kunders ordrer og tilhørende oplysniger. Derudover er der usikkerhed omkring den præcise forretningsmæssige og juridiske omkostning. 
 
 
 
@@ -56,6 +74,12 @@ Udledt sikkerhedskrav: API'et skal validere ejerskab/rettighed for den aktuelle 
 
 A01:2025 Broken Access Control
 IDOR
+
+Implementering
+Med udgangspunkt i den identificerede risiko (12 – Høj) og STRIDE-truslen Information Disclosure (IDOR / manglende ejerskabskontrol på ordreniveau) har vi implementeret server-side ejerskabskontrol i OrderRepository og opdateret CheckoutController, så ordrer kun udleveres, hvis de tilhører den aktuelt autentificerede bruger. Det sikrer, at et ordre-ID sendt fra klienten ikke i sig selv giver adgang til andres data.
+
+Verifikation og begrænsninger
+Vi har verificeret ændringen ved at teste applikationen efter implementeringen. Resultaterne dokumenterer, at ejerskabskontrollen blokerer uautoriseret opslag af ordrer. Verifikationen har den begrænsning, at 
 
 
 
