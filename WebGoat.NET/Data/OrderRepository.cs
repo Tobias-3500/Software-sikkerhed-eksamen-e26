@@ -19,6 +19,11 @@ namespace WebGoatCore.Data
             _customerRepository = customerRepository;
         }
 
+          public Order? GetOrderByIdForCustomer(int orderId, string customerId)
+{
+    return _context.Orders.SingleOrDefault(o => o.OrderId == orderId && o.CustomerId == customerId);
+}
+
         public Order GetOrderById(int orderId)
         {
             return _context.Orders.Single(o => o.OrderId == orderId);

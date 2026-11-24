@@ -158,6 +158,37 @@ namespace WebGoatCore.Controllers
             return RedirectToAction("Receipt");
         }
 
+         public IActionResult Receipt(int? id)
+{
+    var customer = GetCustomerOrAddError();
+    if (customer == null)
+    {
+        return View();
+    }
+
+    var orderId = HttpContext.Session.GetInt32("OrderId");
+    if (id != null)
+    {
+        orderId = id;
+    }
+
+    if (orderId == null)
+    {
+        ModelState.AddModelError(string.Empty, "No order specified. Please try again.");
+        return View();
+    }
+
+    var order = _orderRepository.GetOrderByIdForCustomer(orderId.Value, customer.CustomerId);
+    if (order == null)
+    {
+        ModelState.AddModelError(string.Empty, string.Format("Order {0} was not found.", orderId));
+        return View();
+    }
+
+    return View(order);
+}
+
+/*
         public IActionResult Receipt(int? id)
         {
             var orderId = HttpContext.Session.GetInt32("OrderId");
@@ -185,6 +216,7 @@ namespace WebGoatCore.Controllers
 
             return View(order);
         }
+        */
 
         public IActionResult Receipts()
         {
