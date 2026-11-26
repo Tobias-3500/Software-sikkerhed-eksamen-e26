@@ -1,22 +1,28 @@
-Bestil varer til levering.
+# Bestil varer til levering.
+Kunde fylder kurven med ønskede varer. Kunden går til checkout, udfylder personlige oplysninger og betalingskort. Kunde placerer ordrer og får en kvittering.
 
-Forudsætning: Kunde har oprettet en konto.
+#### Forudsætning:
+kunde har oprettet en konto.
 
-Aktiver: Betalingskort værdier, personlige oplysninger, Varer og leveringsadresse. 
+#### Aktiver:
+Betalingskort værdier, personlige oplysninger, Varer og leveringsadresse. 
 
-Kunde fylder kurven med ønskede varer. Kunden går til checkout og udfylder personlige oplysninger og betalingskort. Kunde placerer ordrer og får en kvittering.
-
-Misbrugstilfælde: Uautoriseret adgang til andre brugeres ordrer, leveringsoplysninger og kortdata.
-
-Tilknyttede brugstilfælde: Nr. 1 (Bestil varer til levering).
-
-Forudsætning: Den ondsindede aktør har adgang til applikationen (f.eks. via en oprettet brugerkonto).
+#### Misbrugstilfælde:
+uautoriseret adgang til andre brugeres ordrer, leveringsoplysninger og kortdata.
 
 Den ondsindede aktør tilgår bestillings- eller ordreoversigten i applikationen og forsøger at fremsøge eller tilgå ordrer, der tilhører andre kunder, for derigennem at få vist fortrolige aktiver i form af ordredetaljer, personlige oplysninger, leveringsadresse samt gemte betalingskortoplysninger.
 
-Foranstaltning: Systemet verificerer, at en bruger er logget ind på sin konto (autentifikation), før ordre- og checkout-funktioner kan tilgås, men der mangler en eksplicit og konsekvent kontrol af, at den enkelte ordre eller de tilhørende oplysninger rent faktisk tilhører den pågældende kunde (autorisation). 
+#### Tilknyttede brugstilfælde:
+Nr. 1 (Bestil varer til levering).
 
-Bemærkning: Truslen udgør et direkte brud på fortroligheden (C i CIA-modellen) af kundernes personlige og finansielle aktiver. Hvis adgangskontrollen på ordreniveau ikke håndhæves korrekt, kan enhver bruger med adgang til systemet potentiel tilgå andre kunders historik og oplysninger, hvilket gør dette misbrugstilfælde højt relevant at tage videre til risikovurderingen. 
+#### Forudsætning:
+Den ondsindede aktør har adgang til applikationen (f.eks. via en oprettet brugerkonto).
+
+#### Foranstaltning:
+Systemet verificerer, at en bruger er logget ind på sin konto (autentifikation), før ordre- og checkout-funktioner kan tilgås, men der mangler en eksplicit og konsekvent kontrol af, at den enkelte ordre eller de tilhørende oplysninger rent faktisk tilhører den pågældende kunde (autorisation). 
+
+#### Bemærkning:
+Truslen udgør et direkte brud på fortroligheden (C i CIA-modellen) af kundernes personlige og finansielle aktiver. Hvis adgangskontrollen på ordreniveau ikke håndhæves korrekt, kan enhver bruger med adgang til systemet potentiel tilgå andre kunders historik og oplysninger, hvilket gør dette misbrugstilfælde højt relevant at tage videre til risikovurderingen. 
 
 Analyse af risiko ("Konsekvens"×"Sandsynlighed" )
 
@@ -74,6 +80,7 @@ Udledt sikkerhedskrav: API'et skal validere ejerskab/rettighed for den aktuelle 
 
 A01:2025 Broken Access Control
 IDOR
+BRUGT TAINT ANALYSIS MED SECURTIY CODE SCAN
 
 Implementering
 Med udgangspunkt i den identificerede risiko (12 – Høj) og STRIDE-truslen Information Disclosure (IDOR / manglende ejerskabskontrol på ordreniveau) har vi implementeret server-side ejerskabskontrol i OrderRepository og opdateret CheckoutController, så ordrer kun udleveres, hvis de tilhører den aktuelt autentificerede bruger. Det sikrer, at et ordre-ID sendt fra klienten ikke i sig selv giver adgang til andres data.
